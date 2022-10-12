@@ -1,101 +1,112 @@
-#!/usr/bin/python3
-"""Node  class definintion """
 
+class Node():
+    """Node class for a singly-linked list"""
 
-class Node:
-    """ Node  class defined
-        Attributes:
-            size (int): data of node
-    """
     def __init__(self, data, next_node=None):
-        """initializes
+        """instantiation of a singly-linked list node
         Args:
-            data (int): data
-            next_node: next_node
-        Returns:
-            None
+          data (int): data contained in the node
+          next_node (Node, optional): the next node of the list
+        Raises:
+          TypeError: if the data is not an integer of next_node is not
+          a Node instance
         """
-        self.data = data
-        self.next_node = None
+
+        if type(data) != int:
+            raise TypeError("data must be an integer")
+        self.__data = data
+
+        if next_node is None or isinstance(next_node, Node):
+            self.__next_node = next_node
+        else:
+            raise TypeError("next_node must be a Node object")
 
     @property
     def data(self):
-        """
-        getter of data
-        Return:
-            data
+        """Returns the data value in the current node
+        Returns:
+          data value contained in current node
         """
         return self.__data
 
     @data.setter
     def data(self, value):
-        """
-        Setter of data
+        """Sets the data value of the current node
         Args:
-            value (int): data
-        Raises
-            TypeError: if data is not int
-        Returns:
-            None
+          data (int): the new data value of the node
+        Raises:
+          TypeError: when the data value is not an integer
         """
-        if type(value) is not int:
-            raise TypeError("data must be an integer")
-        else:
-            self.__data = value
 
-    
+        if type(value) != int:
+            raise TypeError("data must be an integer")
+        self.__data     @property
+
     @property
     def next_node(self):
-        """
-        getter of node
-        Return:
-            node
+        """Retrives the next_node value for the current node
+        Returns:
+          the next_node of the current node
         """
         return self.__next_node
 
-      
     @next_node.setter
     def next_node(self, value):
-        """
-        Setter of next_node
+        """Sets a new next_node of the current node
         Args:
-            value (int): next_node
-        Raises
-            TypeError: if data is not int
-        Returns:
-            None
+          value (Node): the new node
+        Raises:
+          TypeError: if the next_node is not a Node instance
         """
-        if not isinstance(value, Node) and value != None:
-            raise TypeError("next_node must be a Node object")
-        else:
-            self.__next_node = value
 
-class SinglyLinkedList:
-     """
-    SinglyLinkedList class
-    Attributes:
-        head (Node): a pointer to the singly linked list
-    """
+        if value is None or isinstance(value, Node):
+            self.__next_node = value
+        else:
+            raise TypeError("next_npde must be a Node object")
+
+
+class SinglyLinkedList():
+    """Singly-linked list class - start out empty"""
+
     def __init__(self):
-         """
-        Class initializer
-        """
+        """Initializes an empty singly linked list object"""
+
         self.__head = None
 
     def sorted_insert(self, value):
+        """Inserts a Node into the linked list in a sorted fashion
+        Args:
+          value (int): the Node value
+        Raises:
+          TypeError:if the value supplied to the node is not an integer
         """
-        Inserts new Node
-        """
-        if self.__head is None:
-            self.__head = Node(value)
+
+        if type(value) != int:
+            raise TypeError("data must be an integer")
+        temp = None
+        iterator = self.__head
+        new_node = Node(value)
+        if iterator is None:
+            new_node.__next_node = None
+            self.__head = new_node
+
         else:
-            new_node = Node(value)
-            tmp = self.__head
-            while tmp is not None:
-                if tmp.__next_node is None:
-                    tmp.__next_node = new_node
-                    new_node.__next_node = None
-                if new_node.__data < tmp.__next_node.__data:
-                    new_node.__next_node = tmp.__next_node
-                    tmp.__next_node = new_node
-                tmp = tmp.__next_node
+            while iterator is not None and value > iterator.data:
+                temp = iterator
+                iterator = iterator.__next_node
+            if temp is None:
+                new_node.__next_node = self.__head
+                self.__head = new_node
+            else:
+                temp.__next_node = new_node
+                new_node.__next_node = iterator
+
+    def __str__(self):
+        """Default printing operation for the class when print() is called"""
+
+        linked_list = []
+        iterator = self.__head
+        while iterator is not None:
+            linked_list.append(iterator.data)
+            iterator = iterator.__next_node
+        return ('\n'.join(str(i) for i in linked_list)
