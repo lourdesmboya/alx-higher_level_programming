@@ -1,0 +1,1 @@
+Practice on SQL queries
